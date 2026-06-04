@@ -3,4 +3,4 @@ dist
 build
 coverage
 pnpm-lock.yaml
-*.md
+# *.md
