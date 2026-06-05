@@ -12,7 +12,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "typecheck": "pnpm -r run typecheck",
+    "typecheck": "pnpm -r --if-present run typecheck",
     "check": "pnpm format:check && pnpm lint && pnpm typecheck"
   },
   "devDependencies": {

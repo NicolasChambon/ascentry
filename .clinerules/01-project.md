@@ -10,7 +10,6 @@ stats dashboard and an AI coaching assistant.
 - apps/api → NestJS backend
 - apps/web → React + Vite frontend
 - packages/shared → Zod schemas and types shared by api and web
-- packages/config → reserved for future shared tooling config (currently unused)
 
 ESLint, TypeScript, and Prettier are configured at the monorepo root and
 apply to all workspaces globally.

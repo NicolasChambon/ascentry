@@ -12,6 +12,13 @@ export default tseslint.config(
   ...tseslint.configs.stylisticTypeChecked,
 
   {
+    files: ['apps/api/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-extraneous-class': 'off',
+    },
+  },
+
+  {
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -23,7 +30,7 @@ export default tseslint.config(
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {
-      '@eslint-community/eslint-plugin-eslint-comments': eslintComments,
+      '@eslint-community/eslint-comments': eslintComments,
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'error',
