@@ -19,7 +19,13 @@ import { HealthModule } from './health/health.module';
           level: config.get('LOG_LEVEL', { infer: true }),
           transport:
             config.get('NODE_ENV', { infer: true }) !== 'production'
-              ? { target: 'pino-pretty', options: { singleLine: true } }
+              ? {
+                  target: 'pino-pretty',
+                  options: {
+                    singleLine: false,
+                    ignore: 'pid,hostname,req.headers,req.remoteAddress,req.remotePort,res.headers',
+                  },
+                }
               : undefined,
         },
       }),
