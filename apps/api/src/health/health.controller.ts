@@ -1,10 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-
-interface HealthResponse {
-  status: 'ok';
-  uptime: number;
-  timestamp: string;
-}
+import type { HealthResponse } from '@ascentry/shared';
 
 @Controller('health')
 export class HealthController {
