@@ -9,7 +9,7 @@
     "typecheck": "tsc --noEmit",
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio --port 5555"
   },
   "dependencies": {
     "@ascentry/shared": "workspace:*",
