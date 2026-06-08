@@ -17,6 +17,8 @@ async function bootstrap(): Promise<void> {
 
   app.setGlobalPrefix('api');
 
+  app.enableShutdownHooks();
+
   await app.listen(port);
 
   app.get(Logger).log(`API listening on http://localhost:${String(port)}`);
