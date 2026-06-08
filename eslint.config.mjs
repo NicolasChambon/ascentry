@@ -33,6 +33,13 @@ export default tseslint.config(
   },
 
   {
+    files: ['apps/web/src/components/ui/**'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
+
+  {
     languageOptions: {
       parserOptions: {
         projectService: true,
