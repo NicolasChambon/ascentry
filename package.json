@@ -14,7 +14,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "pnpm -r --if-present run typecheck",
-    "check": "pnpm format:check && pnpm lint && pnpm typecheck"
+    "check": "pnpm format:check && pnpm lint && pnpm typecheck",
+    "dev": "docker compose up -d --wait postgres && pnpm -r --parallel --if-present run dev",
+    "setup": "bash scripts/setup.sh"
   },
   "devDependencies": {
     "@eslint-community/eslint-plugin-eslint-comments": "^4.7.2",
