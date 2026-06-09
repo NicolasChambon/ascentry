@@ -1,0 +1,35 @@
+name: Deploy Production
+
+on:
+  push:
+    tags: ['v*']
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      DATABASE_URL: ${{ secrets.PROD_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - run: corepack enable
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Apply migrations on Neon production
+        run: pnpm --filter @ascentry/api exec prisma migrate deploy
+
+      - name: Deploy API (tagged commit)
+        run: curl -fsS "${{ secrets.RENDER_DEPLOY_HOOK_API }}&ref=${{ github.sha }}"
+
+      - name: Deploy Web (tagged commit)
+        run: curl -fsS "${{ secrets.RENDER_DEPLOY_HOOK_WEB }}&ref=${{ github.sha }}"
