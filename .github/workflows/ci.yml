@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+  concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: true
+
+  jobs:
+    quality:
+      runs-on: ubuntu-latest
+      env:
+        DATABASE_URL: postgresql://user:password@localhost:5432/ascentry?schema=public
+      steps:
+        - uses: actions/checkout@v4
+
+        - name: Setup pnpm
+          uses: pnpm/action-setup@v4
+
+        - name: Install dependencies
+          run: pnpm install --frozen-lockfile
+
+        - name: Build shared package
+          run: pnpm --filter @ascentry/shared build
+
+        - name: Generate Prisma client
+          run: pnpm --filter @ascentry/api exec prisma generate
+
+        - name: Lint
+          run: pnpm lint
+
+        - name: Typecheck
+          run: pnpm typecheck
+
+        - name: Test
+          run: pnpm test
+
+        - name: Build
+          run: pnpm -r --if-present run build

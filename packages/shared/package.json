@@ -24,12 +24,15 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "tsup": "^8.5.1"
+    "tsup": "^8.5.1",
+    "vitest": "^4.1.8"
   }
 }
