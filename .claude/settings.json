@@ -8,9 +8,6 @@
       "Bash(git branch:*)",
       "Bash(docker compose:*)"
     ],
-    "deny": [
-      "Read(./apps/api/.env)",
-      "Read(**/.env)"
-    ]
+    "deny": ["Read(./apps/api/.env)", "Read(**/.env)"]
   }
 }

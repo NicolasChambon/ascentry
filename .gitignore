@@ -19,3 +19,5 @@ Thumbs.db
 .idea
 
 docs/local/
+
+.claude/settings.local.json
