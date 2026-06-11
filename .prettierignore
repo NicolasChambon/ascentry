@@ -3,8 +3,4 @@ dist
 build
 coverage
 pnpm-lock.yaml
-
-# Prisma-generated client (git-ignored, not authored by us)
 apps/api/src/generated
-
-# *.md
