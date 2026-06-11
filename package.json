@@ -17,9 +17,12 @@
     "check": "pnpm format:check && pnpm lint && pnpm typecheck",
     "dev": "docker compose up -d --wait postgres && concurrently -n shared,api,web,studio -c gray,blue,green,magenta \"pnpm --filter @ascentry/shared dev\" \"pnpm --filter @ascentry/api dev\" \"pnpm --filter @ascentry/web dev\" \"pnpm --filter @ascentry/api db:studio\"",
     "setup": "bash scripts/setup.sh",
-    "test": "pnpm -r --if-present run test"
+    "test": "pnpm -r --if-present run test",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
     "@eslint-community/eslint-plugin-eslint-comments": "^4.7.2",
     "@eslint/js": "^10.0.1",
     "concurrently": "^10.0.3",
@@ -27,8 +30,19 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.60.1"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,cts, mts,js,jsx,cjs,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml,css}": [
+      "prettier --write"
+    ]
   }
 }
