@@ -44,6 +44,9 @@ jobs:
       - name: Generate Prisma client
         run: pnpm --filter @ascentry/api exec prisma generate
 
+      - name: Format
+        run: pnpm format:check
+
       - name: Lint
         run: pnpm lint
 

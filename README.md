@@ -19,13 +19,13 @@ Built on top of the Strava API, with production-grade security, testing and CI f
 
 ## Tech stack
 
-| Area | Choices |
-|---|---|
-| **Backend** | NestJS, Prisma 7 (Postgres driver adapter), PostgreSQL, Zod (`nestjs-zod`), Pino |
-| **Frontend** | React 19 + Vite, TypeScript, Tailwind CSS v4, shadcn/ui |
-| **Shared** | `@ascentry/shared` — Zod schemas + inferred types, dual CJS/ESM build (tsup) |
-| **Tooling** | pnpm workspaces, TypeScript (strict), ESLint (type-checked), Prettier, Vitest |
-| **Infra** | Docker (dev database), Render (hosting), Neon (managed Postgres), GitHub Actions (CI/CD) |
+| Area         | Choices                                                                                  |
+| ------------ | ---------------------------------------------------------------------------------------- |
+| **Backend**  | NestJS, Prisma 7 (Postgres driver adapter), PostgreSQL, Zod (`nestjs-zod`), Pino         |
+| **Frontend** | React 19 + Vite, TypeScript, Tailwind CSS v4, shadcn/ui                                  |
+| **Shared**   | `@ascentry/shared` — Zod schemas + inferred types, dual CJS/ESM build (tsup)             |
+| **Tooling**  | pnpm workspaces, TypeScript (strict), ESLint (type-checked), Prettier, Vitest            |
+| **Infra**    | Docker (dev database), Render (hosting), Neon (managed Postgres), GitHub Actions (CI/CD) |
 
 ## Repository structure
 
@@ -65,15 +65,15 @@ pnpm dev     # starts the API (:3000), the web app (:5173) and database GUI (:55
 
 Run from the repository root:
 
-| Command | Description |
-|---|---|
-| `pnpm setup` | One-time bootstrap (env, deps, DB, Prisma client, migrations) |
-| `pnpm dev` | Run database + API + web + Prisma Studio in parallel |
-| `pnpm test` | Run the test suites of every package |
-| `pnpm lint` / `pnpm lint:fix` | ESLint across the monorepo |
-| `pnpm format` / `pnpm format:check` | Prettier |
-| `pnpm typecheck` | Type-check every package |
-| `pnpm check` | `format:check` + `lint` + `typecheck` (what CI runs) |
+| Command                             | Description                                                   |
+| ----------------------------------- | ------------------------------------------------------------- |
+| `pnpm setup`                        | One-time bootstrap (env, deps, DB, Prisma client, migrations) |
+| `pnpm dev`                          | Run database + API + web + Prisma Studio in parallel          |
+| `pnpm test`                         | Run the test suites of every package                          |
+| `pnpm lint` / `pnpm lint:fix`       | ESLint across the monorepo                                    |
+| `pnpm format` / `pnpm format:check` | Prettier                                                      |
+| `pnpm typecheck`                    | Type-check every package                                      |
+| `pnpm check`                        | `format:check` + `lint` + `typecheck` (what CI runs)          |
 
 Database tasks (Prisma) on the API package:
 
@@ -89,12 +89,12 @@ Each app documents its variables in a committed `.env.example`. Copy it to `.env
 
 API (`apps/api/.env`):
 
-| Variable | Description |
-|---|---|
+| Variable       | Description                             |
+| -------------- | --------------------------------------- |
 | `DATABASE_URL` | PostgreSQL connection string (required) |
-| `NODE_ENV` | `development` \| `test` \| `production` |
-| `PORT` | API port (default `3000`) |
-| `LOG_LEVEL` | Pino log level (default `info`) |
+| `NODE_ENV`     | `development` \| `test` \| `production` |
+| `PORT`         | API port (default `3000`)               |
+| `LOG_LEVEL`    | Pino log level (default `info`)         |
 
 Environment variables are validated with Zod at startup — the API fails fast with a clear error if a required one is missing.
 
@@ -124,10 +124,10 @@ The project targets a "professional startup" level of strictness:
 
 Two environments, hosted on **Render** (API as a Docker web service, web as a static site) with **Neon** for managed Postgres (one branch per environment).
 
-| Environment | Trigger |
-|---|---|
-| **Staging** | Automatic on merge to `main` (migrations applied via GitHub Actions, app redeployed by Render) |
-| **Production** | Push a release tag, then approve the run in GitHub Actions |
+| Environment    | Trigger                                                                                        |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| **Staging**    | Automatic on merge to `main` (migrations applied via GitHub Actions, app redeployed by Render) |
+| **Production** | Push a release tag, then approve the run in GitHub Actions                                     |
 
 Releasing to production:
 
