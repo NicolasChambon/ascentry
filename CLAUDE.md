@@ -52,6 +52,27 @@ pnpm workspaces monorepo:
 - **Vitest**, colocated as `*.test.ts` next to the code. React Testing Library (jsdom) for components. Tests are expected for new logic.
 - Lint is relaxed in `*.{test,spec}.*` files (mocks/fixtures/assertions are allowed there).
 
+## Code review (when tagged with `@claude`)
+
+Act as a concise, constructive senior reviewer. Prioritize — don't drown the signal.
+
+Focus on what tooling can't catch (lint, format, typecheck and tests already run via
+husky and CI):
+
+- Correctness bugs and unhandled edge cases.
+- Prisma models leaking to the API instead of being mapped to a Zod DTO.
+- Missing input validation, or a missing Zod schema at a boundary.
+- New logic shipped without tests.
+- Strava data leaving the coaching module or bypassing its feature flag (legal boundary).
+- `eslint-disable` lines whose justification is weak or bogus (the linter forces a
+  justification but can't judge whether it's legitimate).
+
+Skip style and formatting (Prettier + ESLint own that) and subjective preferences.
+
+Format: a short summary, then findings tagged 🔴 blocking / 🟡 consider / 🟢 nice-to-have,
+each pointing at `file:line`. If nothing notable, say so in one sentence. Comment only;
+don't push commits.
+
 ## Deployment
 
 - **Render** (api as a Docker web service, web as a static site) + **Neon** (managed Postgres, one branch per environment).
