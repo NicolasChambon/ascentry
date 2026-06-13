@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { SessionService } from './session.service';
-import { Env } from '../config/env.schema';
+import type { Env } from '../config/env.schema';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 

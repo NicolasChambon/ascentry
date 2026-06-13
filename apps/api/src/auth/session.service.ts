@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { Env } from '../config/env.schema';
+import type { Env } from '../config/env.schema';
 import { createHash, randomBytes } from 'node:crypto';
 
 const TOKEN_BYTES = 32;
