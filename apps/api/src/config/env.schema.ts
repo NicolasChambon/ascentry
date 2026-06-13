@@ -6,6 +6,7 @@ export const envSchema = z.object({
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
   DATABASE_URL: z.url(),
   SESSION_TTL_DAYS: z.coerce.number().int().positive().default(30),
+  WEB_ORIGIN: z.url().default('http://localhost:5173'),
 });
 
 export type Env = z.infer<typeof envSchema>;

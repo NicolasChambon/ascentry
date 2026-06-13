@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { validateEnv } from './config/env.validation';
 import { LoggerModule } from 'nestjs-pino';
-import { Env } from './config/env.schema';
+import type { Env } from './config/env.schema';
 import { HealthModule } from './health/health.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';

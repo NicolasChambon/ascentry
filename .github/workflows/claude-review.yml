@@ -31,4 +31,3 @@ jobs:
           prompt: |
             Review this pull request following the "Code review" section of CLAUDE.md.
             Post your findings as a single PR comment.
-          claude_args: '--max-turns 15'
