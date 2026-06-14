@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: read
-      issues: read
+      pull-requests: write # poster la review en commentaire
+      issues: write # un commentaire de PR passe par l'API issues
       id-token: write
       actions: read
     steps:
