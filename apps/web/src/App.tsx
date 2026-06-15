@@ -1,38 +1,51 @@
-import { useEffect, useState } from 'react';
-import { healthResponseSchema, type HealthResponse } from '@ascentry/shared';
+import { useMe } from './auth/useMe';
+import type { ReactNode } from 'react';
+import { AuthScreen } from './AuthScreen';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { logout } from './auth/auth.api';
 import { Button } from './components/ui/button';
 
 export function App() {
-  const [health, setHealth] = useState<HealthResponse | null>(null);
-  const [count, setCount] = useState(0);
+  const me = useMe();
+  const queryClient = useQueryClient();
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['me'] });
+    },
+  });
 
-  useEffect(() => {
-    const controller = new AbortController();
-
-    fetch('/api/health', { signal: controller.signal })
-      .then(async (res) => {
-        const data: unknown = await res.json();
-        setHealth(healthResponseSchema.parse(data));
-      })
-      .catch((err: unknown) => {
-        console.error('Health check échoué', err);
-      });
-
-    return () => {
-      controller.abort();
-    };
-  }, []);
-
-  const handleClick = () => {
-    setCount((c) => c + 1);
-  };
+  if (me.isPending) {
+    return <Centered>Chargement...</Centered>;
+  }
+  if (me.isError) {
+    return <Centered>Erreur de connexion au serveur</Centered>;
+  }
+  if (!me.data) {
+    return <AuthScreen />;
+  }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-100">
-      <h1 className="text-4xl font-bold text-slate-800">Ascentry</h1>
-      <p className="text-slate-600">API health : {health ? health.status : 'chargement…'}</p>
-      <p className="text-slate-600">Test prod</p>
-      <Button onClick={handleClick}>Count: {count}</Button>
+    <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-100 text-slate-800">
+      <h1 className="text-4xl font-bold">Ascentry</h1>
+      <p className="text-slate-600">{`Connecté : ${me.data.email}`}</p>
+      <Button
+        onClick={() => {
+          logoutMutation.mutate();
+        }}
+        disabled={logoutMutation.isPending}
+      >
+        Se déconnecter
+      </Button>
+    </main>
+  );
+}
+
+function Centered({ children }: { children: ReactNode }) {
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-100 text-slate-800">
+      <h1 className="text-4xl font-bold">Ascentry</h1>
+      <p className="text-slate-600">{children}</p>
     </main>
   );
 }
