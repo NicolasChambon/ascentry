@@ -29,5 +29,10 @@ jobs:
           additional_permissions: |
             actions: read
           prompt: |
-            Review this pull request following the "Code review" section of CLAUDE.md.
-            Post your findings as a single PR comment.
+            Review pull request #${{ github.event.issue.number }} in ${{ github.repository }},
+            following the "Code review" section of CLAUDE.md.
+            Read the changes with `gh pr diff ${{ github.event.issue.number }}`, then post your
+            findings as a single PR comment with
+            `gh pr comment ${{ github.event.issue.number }} --body "..."`.
+          # En mode agent, Claude doit avoir le droit d'appeler ces outils pour commenter.
+          claude_args: '--allowed-tools "Read,Grep,Glob,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*)" --max-turns 20'
