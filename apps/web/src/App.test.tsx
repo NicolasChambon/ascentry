@@ -76,7 +76,7 @@ describe('Auth flow', () => {
     fireEvent.change(screen.getByLabelText('Email'), {
       target: { value: 'example@email.com' },
     });
-    fireEvent.change(screen.getByPlaceholderText('Mot de passe'), {
+    fireEvent.change(screen.getByLabelText('Mot de passe'), {
       target: { value: 'longenough' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Se connecter' }));

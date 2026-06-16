@@ -1,5 +1,4 @@
 import { useMe } from './auth/useMe';
-import type { ReactNode } from 'react';
 import { AuthScreen } from './AuthScreen';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { logout } from './auth/auth.api';
@@ -41,7 +40,7 @@ export function App() {
   );
 }
 
-function Centered({ children }: { children: ReactNode }) {
+function Centered({ children }: { children: string }) {
   return (
     <PageShell>
       <p className="text-muted-foreground">{children}</p>
