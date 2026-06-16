@@ -40,6 +40,8 @@ pnpm workspaces monorepo:
 
 - **Server state → TanStack Query** (introduced with the auth feature). **Client state → Zustand**, only when a real need appears. **Never** store server data in Zustand.
 - Tailwind v4 (CSS-first config). shadcn components live in `apps/web/src/components/ui` — vendored code; ESLint is relaxed there, don't refactor it to satisfy lint.
+- **Colors are semantic role tokens — never a raw palette index.** Use `bg-background`, `text-foreground`, `text-muted-foreground`, `border-input`, `text-destructive`, `bg-card`/`text-card-foreground`… (defined in `apps/web/src/index.css`). No `slate-*` / `red-*` in a component. If a role is missing, add a role-named token in `index.css`, not a hardcoded color. Keeps dark mode automatic (the `.dark` block already maps every token).
+- **Reach for an existing shadcn component before hand-rolling markup**; add new ones with `pnpm dlx shadcn@latest add <name>` rather than reimplementing (e.g. an icon button is `Button variant="ghost" size="icon"`, not a styled `<button>`). Exception: don't adopt shadcn's `form` (it forces react-hook-form) — keep the manual `useState` + Zod `safeParse`.
 
 ## Database (Prisma 7)
 

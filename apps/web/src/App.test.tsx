@@ -73,7 +73,7 @@ describe('Auth flow', () => {
 
   it('logs in and swaps to the connected view', async () => {
     await screen.findByText('Connexion');
-    fireEvent.change(screen.getByPlaceholderText('Email'), {
+    fireEvent.change(screen.getByLabelText('Email'), {
       target: { value: 'example@email.com' },
     });
     fireEvent.change(screen.getByPlaceholderText('Mot de passe'), {
@@ -84,10 +84,10 @@ describe('Auth flow', () => {
   });
 
   it('logs out and returns to the login form', async () => {
-    fireEvent.change(await screen.findByPlaceholderText('Email'), {
+    fireEvent.change(await screen.findByLabelText('Email'), {
       target: { value: 'example@email.com' },
     });
-    fireEvent.change(screen.getByPlaceholderText('Mot de passe'), {
+    fireEvent.change(screen.getByLabelText('Mot de passe'), {
       target: { value: 'longenough' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Se connecter' }));
@@ -99,10 +99,10 @@ describe('Auth flow', () => {
 
   it('rejects a too-short password on register without calling the API', async () => {
     fireEvent.click(await screen.findByRole('button', { name: "Pas de compte ? S'inscrire" }));
-    fireEvent.change(screen.getByPlaceholderText('Email'), {
+    fireEvent.change(screen.getByLabelText('Email'), {
       target: { value: 'example@email.com' },
     });
-    fireEvent.change(screen.getByPlaceholderText('Mot de passe'), { target: { value: 'short' } });
+    fireEvent.change(screen.getByLabelText('Mot de passe'), { target: { value: 'short' } });
     fireEvent.click(screen.getByRole('button', { name: "S'inscrire" }));
 
     expect(

@@ -4,6 +4,12 @@ import { SubmitEvent, useState } from 'react';
 import { login, register } from './auth/auth.api';
 import { Button } from './components/ui/button';
 import { loginSchema, registerSchema } from '@ascentry/shared';
+import { Label } from './components/ui/label';
+import { Input } from './components/ui/input';
+import { Eye, EyeOff } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
+import { PageShell } from './components/PageShell';
+import { Spinner } from './components/ui/spinner';
 
 type Mode = 'login' | 'register';
 
@@ -21,6 +27,7 @@ export function AuthScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const mutation = useMutation({
     mutationFn: (input: { email: string; password: string }) =>
@@ -46,47 +53,76 @@ export function AuthScreen() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-slate-100 text-slate-800">
-      <h1 className="text-4xl font-bold">Ascentry</h1>
-      <form onSubmit={handleSubmit} className="flex w-80 flex-col gap-3">
-        <h2 className="text-xl font-semibold">
-          {mode === 'login' ? 'Connexion' : 'Créer un compte'}
-        </h2>
-        <input
-          type="email"
-          placeholder="Email"
-          autoComplete="email"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-          className="rounded border border-slate-300 px-3 py-2"
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe"
-          autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          className="rounded border border-slate-300 px-3 py-2"
-        />
-        {formError !== null && <p className="text-sm text-red-600">{formError}</p>}
-        <Button type="submit" disabled={mutation.isPending}>
-          {mutation.isPending ? '…' : mode === 'login' ? 'Se connecter' : "S'inscrire"}
-        </Button>
-      </form>
-      <button
+    <PageShell>
+      <Card className="w-80">
+        <CardHeader>
+          <CardTitle className="text-xl">
+            {mode === 'login' ? 'Connexion' : 'Créer un compte'}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="Ex: forrest.gump@me.com"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="password">Mot de passe</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Mot de passe"
+                  autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  className="pr-10"
+                  required
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon-sm"
+                  onClick={() => {
+                    setShowPassword((v) => !v);
+                  }}
+                  aria-label={showPassword ? 'Masquer le mot de passe' : 'Afficher le mot de passe'}
+                  className="absolute top-1/2 right-1 -mt-3.5 text-muted-foreground"
+                >
+                  {showPassword ? <EyeOff /> : <Eye />}
+                </Button>
+              </div>
+            </div>
+            {formError !== null && <p className="text-sm text-destructive">{formError}</p>}
+            <Button type="submit" disabled={mutation.isPending}>
+              {mutation.isPending ? <Spinner /> : mode === 'login' ? 'Se connecter' : "S'inscrire"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+      <Button
+        variant="link"
         type="button"
-        className="text-sm text-slate-500 underline"
+        className="text-muted-foreground"
         onClick={() => {
           setMode((m) => (m === 'login' ? 'register' : 'login'));
           setFormError(null);
         }}
       >
         {mode === 'login' ? "Pas de compte ? S'inscrire" : 'Déjà un compte ? Se connecter'}
-      </button>
-    </main>
+      </Button>
+    </PageShell>
   );
 }
