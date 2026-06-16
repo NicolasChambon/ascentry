@@ -40,7 +40,7 @@ pnpm workspaces monorepo:
 
 - **Server state → TanStack Query** (introduced with the auth feature). **Client state → Zustand**, only when a real need appears. **Never** store server data in Zustand.
 - Tailwind v4 (CSS-first config). shadcn components live in `apps/web/src/components/ui` — vendored code; ESLint is relaxed there, don't refactor it to satisfy lint.
-- **Colors are semantic role tokens — never a raw palette index.** Use `bg-background`, `text-foreground`, `text-muted-foreground`, `border-input`, `text-destructive`, `bg-card`/`text-card-foreground`… (defined in `apps/web/src/index.css`). No `slate-*` / `red-*` in a component. If a role is missing, add a role-named token in `index.css`, not a hardcoded color. Keeps dark mode automatic (the `.dark` block already maps every token).
+- **Colors are semantic role tokens — never a raw palette index.** Use `bg-background`, `text-foreground`, `text-muted-foreground`, `border-input`, `text-destructive`, `bg-card`/ text-card-foreground`… (defined in `apps/web/src/index.css`). No `slate-_`/`red-_`in a component. If a role is missing, add a role-named token in`index.css`, not a hardcoded color. Keeps dark mode automatic (the `.dark` block already maps every token).
 - **Reach for an existing shadcn component before hand-rolling markup**; add new ones with `pnpm dlx shadcn@latest add <name>` rather than reimplementing (e.g. an icon button is `Button variant="ghost" size="icon"`, not a styled `<button>`). Exception: don't adopt shadcn's `form` (it forces react-hook-form) — keep the manual `useState` + Zod `safeParse`.
 
 ## Database (Prisma 7)
@@ -54,7 +54,7 @@ pnpm workspaces monorepo:
 - **Vitest**, colocated as `*.test.ts` next to the code. React Testing Library (jsdom) for components. Tests are expected for new logic.
 - Lint is relaxed in `*.{test,spec}.*` files (mocks/fixtures/assertions are allowed there).
 
-## Code review (when tagged with `@claude`)
+## Code review (when tagged with `@claude-review`)
 
 Act as a concise, constructive senior reviewer. Prioritize — don't drown the signal.
 
@@ -66,14 +66,21 @@ husky and CI):
 - Missing input validation, or a missing Zod schema at a boundary.
 - New logic shipped without tests.
 - Strava data leaving the coaching module or bypassing its feature flag (legal boundary).
-- `eslint-disable` lines whose justification is weak or bogus (the linter forces a
-  justification but can't judge whether it's legitimate).
+- `eslint-disable` lines whose justification is weak or bogus (the linter forces a justification but can't judge whether it's legitimate).
 
 Skip style and formatting (Prettier + ESLint own that) and subjective preferences.
 
-Format: a short summary, then findings tagged 🔴 blocking / 🟡 consider / 🟢 nice-to-have,
-each pointing at `file:line`. If nothing notable, say so in one sentence. Comment only;
-don't push commits.
+**Out of scope — never report findings here:** vendored shadcn components under
+`apps/web/src/components/ui/`. It's third-party code we don't own or hand-edit; treat it as a black box even when a diff touches it.
+
+Tag every finding with a severity label:
+
+- 🔴 **Blocking** — a bug, correctness issue, or legal-boundary breach; must be fixed before merge.
+- 🟡 **Recommended** — should be addressed, but not a merge blocker.
+- 🟢 **Nit** — minor or optional polish; take it or leave it.
+
+Format: leave **inline comments on the exact lines** for localized findings, then post a single PR comment with a short overall summary plus any cross-cutting points. Each finding
+points at `file:line` and carries its severity label. If nothing notable, say so in one sentence. Comment only; don't push commits.
 
 ## Deployment
 

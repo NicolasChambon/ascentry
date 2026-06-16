@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: write # poster la review en commentaire
-      issues: write # un commentaire de PR passe par l'API issues
+      pull-requests: write # post the review in a comment
+      issues: write # a PR comment uses issues API
       id-token: write
       actions: read
     steps:
@@ -31,8 +31,10 @@ jobs:
           prompt: |
             Review pull request #${{ github.event.issue.number }} in ${{ github.repository }},
             following the "Code review" section of CLAUDE.md.
-            Read the changes with `gh pr diff ${{ github.event.issue.number }}`, then post your
-            findings as a single PR comment with
+            Read the changes with `gh pr diff ${{ github.event.issue.number }}`.
+            For findings tied to specific lines, leave inline comments on those exact lines.
+            Then post one overall summary as a PR comment with
             `gh pr comment ${{ github.event.issue.number }} --body "..."`.
-          # En mode agent, Claude doit avoir le droit d'appeler ces outils pour commenter.
-          claude_args: '--allowed-tools "Read,Grep,Glob,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*)" --max-turns 20'
+          # In agent mode, Claude must have the right to call these tools
+          # (gh pr comment = global comment ; create_inline_comment = inline specific comment).
+          claude_args: '--allowed-tools "Read,Grep,Glob,Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr comment:*),mcp__github_inline_comment__create_inline_comment" --max-turns 20'
