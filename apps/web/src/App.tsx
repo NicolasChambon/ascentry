@@ -1,9 +1,9 @@
 import { useMe } from './auth/useMe';
-import type { ReactNode } from 'react';
 import { AuthScreen } from './AuthScreen';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { logout } from './auth/auth.api';
 import { Button } from './components/ui/button';
+import { PageShell } from './components/PageShell';
 
 export function App() {
   const me = useMe();
@@ -26,9 +26,8 @@ export function App() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-100 text-slate-800">
-      <h1 className="text-4xl font-bold">Ascentry</h1>
-      <p className="text-slate-600">{`Connecté : ${me.data.email}`}</p>
+    <PageShell>
+      <p className="text-muted-foreground">{`Connecté : ${me.data.email}`}</p>
       <Button
         onClick={() => {
           logoutMutation.mutate();
@@ -37,15 +36,14 @@ export function App() {
       >
         Se déconnecter
       </Button>
-    </main>
+    </PageShell>
   );
 }
 
-function Centered({ children }: { children: ReactNode }) {
+function Centered({ children }: { children: string }) {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-100 text-slate-800">
-      <h1 className="text-4xl font-bold">Ascentry</h1>
-      <p className="text-slate-600">{children}</p>
-    </main>
+    <PageShell>
+      <p className="text-muted-foreground">{children}</p>
+    </PageShell>
   );
 }

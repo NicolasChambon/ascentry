@@ -3,6 +3,10 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { config } from 'zod';
+import { fr } from 'zod/locales';
+
+config(fr());
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
