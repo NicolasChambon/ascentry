@@ -6,6 +6,7 @@ import type { Env } from './config/env.schema';
 import { HealthModule } from './health/health.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
+import { StravaIntegrationModule } from './strava-integration/strava-integration.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AuthModule } from './auth/auth.module';
     PrismaModule,
     HealthModule,
     AuthModule,
+    StravaIntegrationModule,
   ],
 })
 export class AppModule {}

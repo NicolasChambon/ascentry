@@ -14,6 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: postgresql://user:password@localhost:5432/ascentry?schema=public
+      STRAVA_CLIENT_ID: '12345'
+      STRAVA_CLIENT_SECRET: ci-test-secret
+      STRAVA_REDIRECT_URI: http://localhost:3000/api/strava/callback
+      STRAVA_TOKEN_ENCRYPTION_KEY: m/uQYmSTigy+YUkJ8nHoS3g+74A/yzUVwShupEIV49s=
+
     steps:
       - uses: actions/checkout@v4
 

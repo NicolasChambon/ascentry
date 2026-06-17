@@ -14,14 +14,15 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  passwordHash  String
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                String            @id @default(cuid())
+  email             String            @unique
+  emailVerified     Boolean           @default(false)
+  passwordHash      String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 
-  sessions      Session[]
+  sessions          Session[]
+  stravaConnection  StravaConnection?
 }
 
 model Session {
@@ -33,4 +34,17 @@ model Session {
   createdAt   DateTime  @default(now())
 
   @@index([userId])
+}
+
+model StravaConnection {
+  id              String    @id @default(cuid())
+  userId          String    @unique
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stravaAthleteId BigInt    @unique
+  accessToken     String
+  refreshToken    String
+  expiresAt       DateTime
+  scope           String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
