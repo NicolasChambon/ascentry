@@ -6,13 +6,9 @@
 
 <!-- Bullet list of the notable changes (not a copy-paste of the diff) -->
 
--
-
 ## 🧪 How to test
 
 <!-- Steps to verify locally: commands, user flow, edge cases -->
-
-1.
 
 ## 🖼️ Screenshots (if UI)
 
