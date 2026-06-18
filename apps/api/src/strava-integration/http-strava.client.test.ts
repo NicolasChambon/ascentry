@@ -1,8 +1,7 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HttpStravaClient } from './http-strava.client';
 import { ConfigService } from '@nestjs/config';
 import { Env } from '../config/env.schema';
-import { afterEach } from 'node:test';
 
 const makeClient = () => {
   const config = {
