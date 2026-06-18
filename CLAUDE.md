@@ -86,6 +86,7 @@ points at `file:line` and carries its severity label. If nothing notable, say so
 
 - **Render** (api as a Docker web service, web as a static site) + **Neon** (managed Postgres, one branch per environment).
 - **Staging**: automatic on merge to `main`. **Production**: push a tag `vX.Y.Z`, then approve the **Deploy Production** run in GitHub Actions (migrations on Neon prod + Render deploy of the tagged commit).
+- **A new _required_ env var (no Zod default) must be provisioned in _every_ environment, or the app refuses to boot.** `validateEnv` fails fast at startup, so adding the var to the Zod schema + local `.env` is not enough — set it in **all four** places: `.env.example` (template), the CI job `env:` block in `.github/workflows/ci.yml` (tests boot a Nest module → `ConfigModule` validates `process.env`), the **Render staging** service, and the **Render prod** service **before** that environment runs the new code. Adding it only to your local `.env` passes locally but breaks CI, then staging, then prod (each surfaces the same `Invalid environment variables` boot error). Use real per-environment values for secrets; **an encryption key must stay stable for the life of the data it encrypts** (rotating it makes existing ciphertext undecryptable).
 
 ## Workflow
 
