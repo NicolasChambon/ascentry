@@ -27,6 +27,8 @@ describe('Strava API (fake client + mocked connection service)', () => {
   };
   const connectionService = {
     saveConnection: vi.fn(),
+    getStatus: vi.fn(),
+    deleteConnection: vi.fn(),
   };
 
   beforeAll(async () => {
@@ -159,5 +161,41 @@ describe('Strava API (fake client + mocked connection service)', () => {
 
     expect(res.status).toBe(302);
     expect(res.headers['location']).toBe('https://app.example?strava=already_linked');
+  });
+
+  it('GET /api/strava/status → 200 with the status DTO returned by the service', async () => {
+    connectionService.getStatus.mockResolvedValue({
+      connected: true,
+      athleteId: 42,
+      scopes: ['read', 'activity:read_all'],
+      expiresAt: '2030-01-01T00:00:00.000Z',
+    });
+
+    const res = await request(app.getHttpServer()).get('/api/strava/status');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({
+      connected: true,
+      athleteId: 42,
+      scopes: ['read', 'activity:read_all'],
+      expiresAt: '2030-01-01T00:00:00.000Z',
+    });
+    expect(connectionService.getStatus).toHaveBeenCalledWith('user-1');
+  });
+
+  it('GET /api/strava/status → 200 connected:false when the user is not linked', async () => {
+    connectionService.getStatus.mockResolvedValue({ connected: false });
+
+    const res = await request(app.getHttpServer()).get('/api/strava/status');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ connected: false });
+  });
+
+  it('DELETE /api/strava/connection → 204 and delegates to the service with the session userId', async () => {
+    const res = await request(app.getHttpServer()).delete('/api/strava/connection');
+
+    expect(res.status).toBe(204);
+    expect(connectionService.deleteConnection).toHaveBeenCalledWith('user-1');
   });
 });

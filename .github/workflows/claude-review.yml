@@ -54,8 +54,9 @@ jobs:
             echo "::error::Claude produced no execution file — it failed to start."
             exit 1
           fi
-          if grep -q '"is_error":[[:space:]]*true' "$EXECUTION_FILE"; then
-            echo "::error::Claude review ended in an error state (is_error=true). See 'Run Claude review' logs above for the message."
+          result_is_error=$(jq -r 'last(.[] | select(.type == "result")) | .is_error' "$EXECUTION_FILE")
+          if [ "$result_is_error" != "false" ]; then
+            echo "::error::Claude review ended in an error state (final is_error=$result_is_error). See 'Run Claude review' logs above for the message."
             exit 1
           fi
           echo "Claude review completed cleanly."
