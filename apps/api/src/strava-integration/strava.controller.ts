@@ -1,7 +1,9 @@
 import {
   Controller,
+  Delete,
   ForbiddenException,
   Get,
+  HttpCode,
   Inject,
   Query,
   Req,
@@ -17,6 +19,7 @@ import { STRAVA_STATE_COOKIE } from './strava.constants';
 import { buildStravaAuthorizeUrl } from './strava-authorize-url';
 import { randomBytes } from 'node:crypto';
 import type { Response } from 'express';
+import { StravaStatus } from '@ascentry/shared';
 
 const STATE_COOKIE_MAX_AGE_MS = 10 * 60 * 1000; // 10 minutes
 
@@ -32,6 +35,25 @@ export class StravaController {
     @Inject(STRAVA_CLIENT) private readonly stravaClient: StravaClient,
     private readonly connections: StravaConnectionService,
   ) {}
+
+  @Get('status')
+  async getStatus(@Req() req: AuthRequest): Promise<StravaStatus> {
+    if (req.userId === undefined) {
+      throw new ForbiddenException();
+    }
+
+    return this.connections.getStatus(req.userId);
+  }
+
+  @Delete('connection')
+  @HttpCode(204)
+  async disconnect(@Req() req: AuthRequest): Promise<void> {
+    if (req.userId === undefined) {
+      throw new ForbiddenException();
+    }
+
+    await this.connections.deleteConnection(req.userId);
+  }
 
   @Get('connect')
   connect(@Res() res: Response): void {
