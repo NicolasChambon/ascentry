@@ -92,6 +92,22 @@ describe('StravaConnectionService', () => {
         expiresAt: '2030-01-01T00:00:00.000Z',
       });
     });
+
+    it('maps an empty scope to an empty scopes array', async () => {
+      const { service, prisma } = makeService();
+      prisma.stravaConnection.findUnique.mockResolvedValue({
+        stravaAthleteId: 7n,
+        scope: '',
+        expiresAt: new Date('2030-01-01T00:00:00Z'),
+      });
+
+      expect(await service.getStatus('user-1')).toEqual({
+        connected: true,
+        athleteId: 7,
+        scopes: [],
+        expiresAt: '2030-01-01T00:00:00.000Z',
+      });
+    });
   });
 
   describe('getValidAccessToken', () => {
