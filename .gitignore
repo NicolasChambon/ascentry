@@ -21,3 +21,5 @@ Thumbs.db
 docs/local/
 
 .claude/settings.local.json
+# Playwright root-free harness — vendored native libs cache (see apps/web/scripts/pw.sh)
+apps/web/.pw-libs/

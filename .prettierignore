@@ -4,3 +4,4 @@ build
 coverage
 pnpm-lock.yaml
 apps/api/src/generated
+apps/web/.pw-libs
