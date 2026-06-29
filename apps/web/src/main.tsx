@@ -5,6 +5,8 @@ import { App } from './App';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { config } from 'zod';
 import { fr } from 'zod/locales';
+import { Toaster } from './components/ui/sonner';
+import { StravaRedirectToast } from './strava/StravaRedirectToast';
 
 config(fr());
 
@@ -19,6 +21,8 @@ createRoot(rootElement).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <App />
+      <Toaster />
+      <StravaRedirectToast />
     </QueryClientProvider>
   </StrictMode>,
 );

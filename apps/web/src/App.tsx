@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { logout } from './auth/auth.api';
 import { Button } from './components/ui/button';
 import { PageShell } from './components/PageShell';
+import { StravaConnectionCard } from './strava/StravaConnectionCard';
 
 export function App() {
   const me = useMe();
@@ -28,6 +29,7 @@ export function App() {
   return (
     <PageShell>
       <p className="text-muted-foreground">{`Connecté : ${me.data.email}`}</p>
+      <StravaConnectionCard />
       <Button
         onClick={() => {
           logoutMutation.mutate();

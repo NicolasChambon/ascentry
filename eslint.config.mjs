@@ -33,13 +33,6 @@ export default tseslint.config(
   },
 
   {
-    files: ['apps/web/src/components/ui/**'],
-    rules: {
-      'react-refresh/only-export-components': 'off',
-    },
-  },
-
-  {
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -72,6 +65,15 @@ export default tseslint.config(
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/consistent-type-assertions': 'off',
       '@typescript-eslint/require-await': 'off',
+    },
+  },
+
+  {
+    files: ['apps/web/src/components/ui/**'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+      '@typescript-eslint/consistent-type-assertions': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
 
