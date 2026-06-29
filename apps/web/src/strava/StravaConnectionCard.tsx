@@ -51,7 +51,7 @@ export function StravaConnectionCard() {
         {status.isError && (
           <p className="text-destructive">Impossible de charger le statut Strava.</p>
         )}
-        {status.data?.connected === false && (
+        {status.isSuccess && !status.data.connected && (
           <Button
             onClick={() => {
               connectStrava();
@@ -60,7 +60,7 @@ export function StravaConnectionCard() {
             Connecter Strava
           </Button>
         )}
-        {status.data?.connected === true && (
+        {status.isSuccess && status.data.connected && (
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive" disabled={disconnectMutation.isPending}>
