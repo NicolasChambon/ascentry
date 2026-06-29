@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Spinner } from '@/components/ui/spinner';
 
 export function StravaConnectionCard() {
   const status = useStravaStatus();
@@ -31,18 +32,22 @@ export function StravaConnectionCard() {
     },
   });
 
+  const description = status.isPending
+    ? 'Vérification de la connexion…'
+    : status.isError
+      ? 'Statut Strava indisponible pour le moment.'
+      : status.data.connected
+        ? 'Ton compte Strava est connecté.'
+        : 'Connecte ton compte Strava pour synchroniser tes activités.';
+
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
         <CardTitle>Strava</CardTitle>
-        <CardDescription>
-          {status.data?.connected
-            ? 'Ton compte Strava est connecté.'
-            : 'Connecte ton compte Strava pour synchroniser tes activités.'}
-        </CardDescription>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent>
-        {status.isPending && <p className="text-muted-foreground">Chargement...</p>}
+        {status.isPending && <Spinner className="text-muted-foreground" />}
         {status.isError && (
           <p className="text-destructive">Impossible de charger le statut Strava.</p>
         )}
