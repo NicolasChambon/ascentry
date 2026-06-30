@@ -14,6 +14,6 @@ import { StravaController } from './strava.controller';
     { provide: STRAVA_CLIENT, useClass: HttpStravaClient },
     StravaConnectionService,
   ],
-  exports: [EncryptionService, STRAVA_CLIENT],
+  exports: [EncryptionService, STRAVA_CLIENT, StravaConnectionService],
 })
 export class StravaIntegrationModule {}
