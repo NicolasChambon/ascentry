@@ -19,6 +19,7 @@ const makeService = () => {
   const stravaClient = {
     exchangeCode: vi.fn(),
     refreshTokens: vi.fn(),
+    listActivities: vi.fn(),
   };
   const service = new StravaConnectionService(
     prisma as unknown as PrismaService,
