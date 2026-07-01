@@ -61,5 +61,8 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Integration tests (Testcontainers)
+        run: pnpm --filter @ascentry/api test:integration
+
       - name: Build
         run: pnpm -r --if-present run build
