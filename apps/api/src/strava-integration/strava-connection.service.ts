@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { EncryptionService } from './encryption.service';
 import { STRAVA_CLIENT, type StravaClient, StravaCredentials } from './strava.client';
 import { StravaStatus } from '@ascentry/shared';
+import { Prisma } from '../generated/prisma/client';
 
 const REFRESH_SKEW_MS = 60 * 1000;
 const REFRESH_TX_TIMEOUT_MS = 20_000;
@@ -75,6 +76,7 @@ export class StravaConnectionService {
       {
         timeout: REFRESH_TX_TIMEOUT_MS,
         maxWait: REFRESH_TX_MAX_WAIT_MS,
+        isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted,
       },
     );
   }
