@@ -1,10 +1,11 @@
 import { execFileSync } from 'node:child_process';
 import { PrismaClient } from '../generated/prisma/client';
-import { PostgreSqlContainer } from '@testcontainers/postgresql';
+import { PostgreSqlContainer, StartedPostgreSqlContainer } from '@testcontainers/postgresql';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { createServer } from 'node:net';
 
 const POSTGRES_PORT = 5432;
+const MAX_START_ATTEMPTS = 5;
 
 export interface TestDatabase {
   prisma: PrismaClient;
@@ -31,11 +32,25 @@ function getFreePort(): Promise<number> {
   });
 }
 
+async function startContainer(): Promise<StartedPostgreSqlContainer> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < MAX_START_ATTEMPTS; attempt += 1) {
+    const hostPort = await getFreePort();
+    try {
+      return await new PostgreSqlContainer('postgres:17-alpine')
+        .withExposedPorts({ container: POSTGRES_PORT, host: hostPort })
+        .start();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError instanceof Error
+    ? lastError
+    : new Error('Failed to start the Postgres test container');
+}
+
 export async function startTestDatabase(): Promise<TestDatabase> {
-  const hostPort = await getFreePort();
-  const container = await new PostgreSqlContainer('postgres:17-alpine')
-    .withExposedPorts({ container: POSTGRES_PORT, host: hostPort })
-    .start();
+  const container = await startContainer();
   const connectionString = container.getConnectionUri();
 
   execFileSync('pnpm', ['exec', 'prisma', 'migrate', 'deploy'], {

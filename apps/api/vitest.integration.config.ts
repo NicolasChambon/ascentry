@@ -9,6 +9,11 @@ export default defineConfig({
     testTimeout: 120_000,
     hookTimeout: 120_000,
     env: {
+      // Ryuk (testcontainers' cleanup sidecar) spins up its OWN container to reap
+      // leftovers — and it hits the same limitation as ours: Docker Desktop under
+      // WSL doesn't publish daemon-assigned ephemeral ports, so Ryuk hangs on boot.
+      // Disabled → afterAll's container.stop() handles teardown. Tradeoff: a
+      // hard-killed local run leaks the Postgres container (clean up: docker rm -f).
       TESTCONTAINERS_RYUK_DISABLED: 'true',
     },
   },
