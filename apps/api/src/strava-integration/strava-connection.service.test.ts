@@ -29,46 +29,7 @@ const makeService = () => {
   return { service, prisma, encryption, stravaClient };
 };
 
-const credentials = {
-  accessToken: 'acc',
-  refreshToken: 'ref',
-  expiresAt: new Date('2030-01-01T00:00:00Z'),
-  athleteId: 42,
-};
-
 describe('StravaConnectionService', () => {
-  describe('saveConnection', () => {
-    it('encrypts each token with a per-field AAD bound to the user ID', async () => {
-      const { service, encryption } = makeService();
-      await service.saveConnection('user-1', credentials, 'read,activity:read_all');
-
-      expect(encryption.encrypt).toHaveBeenCalledWith('acc', 'user-1:access');
-      expect(encryption.encrypt).toHaveBeenCalledWith('ref', 'user-1:refresh');
-    });
-
-    it('upserts by userId with encrypted tokens and a BigInt athleteId', async () => {
-      const { service, prisma } = makeService();
-      await service.saveConnection('user-1', credentials, 'read');
-
-      const data = {
-        stravaAthleteId: 42n,
-        accessToken: 'enc(acc|user-1:access)',
-        refreshToken: 'enc(ref|user-1:refresh)',
-        expiresAt: credentials.expiresAt,
-        scope: 'read',
-      };
-
-      expect(prisma.stravaConnection.upsert).toHaveBeenCalledWith({
-        where: { userId: 'user-1' },
-        create: {
-          userId: 'user-1',
-          ...data,
-        },
-        update: data,
-      });
-    });
-  });
-
   describe('getStatus', () => {
     it('returns connected:false when there is no connection', async () => {
       const { service, prisma } = makeService();

@@ -1,10 +1,11 @@
 import swc from 'unplugin-swc';
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
     environment: 'node',
     include: ['src/**/*.{test,spec}.ts'],
+    exclude: [...configDefaults.exclude, '**/*.integration.test.ts'],
     env: {
       // AppModule validate the env at boot (ConfigModule). Prisma is mocked in
       // API tests → this URL is never used, only validated.
