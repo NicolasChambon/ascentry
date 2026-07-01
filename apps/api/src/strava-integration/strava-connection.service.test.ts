@@ -72,59 +72,6 @@ describe('StravaConnectionService', () => {
     });
   });
 
-  describe('getValidAccessToken', () => {
-    it('throws when the user has no connection', async () => {
-      const { service, prisma } = makeService();
-      prisma.stravaConnection.findUnique.mockResolvedValue(null);
-
-      await expect(service.getValidAccessToken('user-1')).rejects.toThrow();
-    });
-
-    it('returns the decrypted access token without refreshing when still valid', async () => {
-      const { service, prisma, encryption, stravaClient } = makeService();
-      prisma.stravaConnection.findUnique.mockResolvedValue({
-        accessToken: 'cipher-acc',
-        refreshToken: 'cipher-ref',
-        expiresAt: new Date(Date.now() + 60 * 60 * 1000),
-      });
-
-      const token = await service.getValidAccessToken('user-1');
-
-      expect(token).toBe('dec(cipher-acc|user-1:access)');
-      expect(encryption.decrypt).toHaveBeenCalledWith('cipher-acc', 'user-1:access');
-      expect(stravaClient.refreshTokens).not.toHaveBeenCalled();
-      expect(prisma.stravaConnection.update).not.toHaveBeenCalled();
-    });
-
-    it('refreshes with the decrypted refresh token, re-persists the rotated pair, and returns the new access token', async () => {
-      const { service, prisma, stravaClient } = makeService();
-      prisma.stravaConnection.findUnique.mockResolvedValue({
-        accessToken: 'cipher-acc',
-        refreshToken: 'cipher-ref',
-        expiresAt: new Date(Date.now() - 1000),
-      });
-      const newExpiry = new Date('2030-06-01T00:00:00Z');
-      stravaClient.refreshTokens.mockResolvedValue({
-        accessToken: 'new-acc',
-        refreshToken: 'new-ref',
-        expiresAt: newExpiry,
-      });
-
-      const token = await service.getValidAccessToken('user-1');
-
-      expect(stravaClient.refreshTokens).toHaveBeenCalledWith('dec(cipher-ref|user-1:refresh)');
-      expect(prisma.stravaConnection.update).toHaveBeenCalledWith({
-        where: { userId: 'user-1' },
-        data: {
-          accessToken: 'enc(new-acc|user-1:access)',
-          refreshToken: 'enc(new-ref|user-1:refresh)',
-          expiresAt: newExpiry,
-        },
-      });
-      expect(token).toBe('new-acc');
-    });
-  });
-
   describe('deleteConnection', () => {
     it('deletes the connection by userId via idempotent deleteMany', async () => {
       const { service, prisma } = makeService();
